@@ -1,0 +1,82 @@
+﻿
+
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Files Uploads</h3>
+        </div>
+        <div class="card-body register-card-body">
+            <div class="form-row">
+                <div class="col-md-12" id="dropzone">
+                    <form asp-controller="DemoUpload" autocomplete="off" asp-antiforgery="true" class="dropzone"
+                          id="demo-upload" enctype="multipart/form-data" asp-action="UploadFiles" method="post">
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                        <div class="form-row">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" id="btnupload" class="btn btn-success">Upload Files</button>
+           
+            <a class="btn btn-danger" asp-controller="DemoUpload" asp-action="UploadFiles">Clear</a>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<link href="~/js/dropzone/dropzone.min.css" rel="stylesheet" />
+<script src="~/js/dropzone/dropzone.min.js"></script>
+
+
+<script>
+    Dropzone.autoDiscover = false;
+    $(function () {
+        var dz = null;
+        $("#demo-upload").dropzone({
+            autoProcessQueue: false,
+            paramName: "File Upload",
+            maxFilesize: 5, //mb
+            maxThumbnailFilesize: 1, //mb
+            maxFiles: 5,
+            parallelUploads: 5,
+            acceptedFiles: ".jpeg,.png,.jpg",
+            uploadMultiple: true,
+            addRemoveLinks: true,
+     
+            init: function () 
+            {
+                dz = this;
+                $("#btnupload").click(function () 
+                {
+                    dz.processQueue();
+                    $(this).attr("disabled", "disabled");
+                });
+            },
+            success: function (file) 
+            {
+                var preview = $(file.previewElement);
+                preview.addClass("dz-success text-success");
+                setTimeout(function () 
+                {
+                    dz.removeFile(file);
+                
+                }, 2000);
+
+            },
+            queuecomplete: function () 
+            {
+                alert('Files Uploaded Successfully!');
+            },
+            dictDefaultMessage: "Drag and drop your files here to upload.",
+            dictRemoveFile: "Remove"
+        });
+ 
+    });
+  
+</script>
+
+}
